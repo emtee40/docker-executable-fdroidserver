@@ -7,5 +7,5 @@ Android SDK with this image, you'll need to mount your own local copy.
 It can be run using:
 
 ```console
-$ docker run --rm -v $(pwd):/repo registry.gitlab.com/fdroid/docker-executable-fdroidserver:latest
+$ docker run --rm -u $(id -u):$(id -g) -v $(pwd):/repo registry.gitlab.com/fdroid/docker-executable-fdroidserver:latest
 ```
