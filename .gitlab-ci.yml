@@ -12,7 +12,7 @@ variables:
   RELEASE_IMAGE: registry.gitlab.com/$CI_PROJECT_NAMESPACE/${CI_PROJECT_NAME}:latest
 
 before_script:
-  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  - echo $CI_BUILD_TOKEN | docker login -u gitlab-ci-token --password-stdin registry.gitlab.com
 
 build:
   stage: build
@@ -23,7 +23,18 @@ build:
 test:
   stage: test
   script:
-    - docker run $TEST_IMAGE
+    - docker run $TEST_IMAGE --version
+    - test -d fdroid || mkdir fdroid
+    - cd fdroid
+    - docker run -v $(pwd):/repo $TEST_IMAGE init --verbose
+    - apk add --no-cache wget
+    - wget -O repo/test.apk
+        https://gitlab.com/fdroid/fdroidserver/raw/1.0.3/tests/repo/info.zwanenburg.caffeinetile_4.apk
+    - docker run -v $(pwd):/repo $TEST_IMAGE update --verbose --create-metadata
+    - test -e repo/index-v1.jar
+    - test -e repo/index.jar
+    - test -e repo/index.xml
+    - grep -F '<application id=' repo/index.xml > /dev/null
 
 release:
   stage: release
