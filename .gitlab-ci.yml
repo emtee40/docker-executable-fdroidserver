@@ -44,3 +44,5 @@ release:
     - docker push $RELEASE_IMAGE
   only:
     - master
+  except:
+    - schedules
