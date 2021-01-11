@@ -1,5 +1,4 @@
-
-FROM registry.gitlab.com/fdroid/ci-images-server:latest
+FROM registry.gitlab.com/fdroid/ci-images-base
 
 COPY signing-key.asc /
 
