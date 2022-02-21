@@ -4,12 +4,8 @@ COPY signing-key.asc /
 
 RUN gpg --import /signing-key.asc
 
-RUN git clone --depth 1 https://gitlab.com/fdroid/fdroidserver.git \
-    && cd fdroidserver \
-    && pip3 install --upgrade babel pip setuptools \
-    && pip3 install --no-binary python-vagrant -e . \
-    && python3 setup.py compile_catalog build \
-    && python3 setup.py install
+RUN python3 -m pip install --upgrade pip wheel setuptools \
+    && python3 -m pip install git+https://gitlab.com/fdroid/fdroidserver.git
 
 # Install additional utilities required by actual builds (list subject to future expansion)
 # build-tools 32.0.0 is needed for a good apksigner
@@ -23,5 +19,5 @@ RUN apt-get update && apt-get install --yes \
 VOLUME ["/repo"]
 WORKDIR /repo
 
-ENTRYPOINT ["../fdroidserver/fdroid"]
+ENTRYPOINT ["/usr/local/bin/fdroid"]
 CMD ["--help"]
