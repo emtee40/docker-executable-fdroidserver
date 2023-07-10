@@ -17,6 +17,8 @@ RUN . /etc/profile.d/bsenv.sh \
 	&& echo y | sdkmanager "build-tools;32.0.0" \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN git config --global safe.directory /repo
+
 VOLUME ["/repo"]
 WORKDIR /repo
 
