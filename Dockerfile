@@ -19,6 +19,8 @@ RUN . /etc/profile.d/bsenv.sh \
 
 RUN git config --global safe.directory /repo
 
+ENV PATH="${PATH}:${fdroidserver}"
+
 VOLUME ["/repo"]
 WORKDIR /repo
 
